@@ -1,0 +1,3 @@
+rootProject.name = 'messagetest'
+
+include ':app'
