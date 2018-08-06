@@ -1,6 +1,6 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-// import {Auth} from 'aws-amplify';
+import {Button, StyleSheet, Text, View} from 'react-native';
+import {Auth} from 'aws-amplify';
 
 export class Home extends React.Component {
 
@@ -10,16 +10,16 @@ export class Home extends React.Component {
 
     render() {
 
-        // Auth.currentAuthenticatedUser()
-        //     .then(user => console.log('Current user', user))
-        //     .catch(err => console.log('Cant get cur user', err));
+        Auth.currentAuthenticatedUser()
+            .then(user => console.log('Current user', user))
+            .catch(err => console.log('Cant get cur user', err));
 
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>Welcome Home!</Text>
-                {/*<Button title='Logout'*/}
-                        {/*color='red'*/}
-                        {/*onPress={() => Auth.signOut()}/>*/}
+                <Button title='Logout'
+                        color='red'
+                        onPress={() => Auth.signOut()}/>
             </View>
         );
     }
