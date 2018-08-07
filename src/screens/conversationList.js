@@ -1,7 +1,8 @@
 import React from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
+import {getUUID} from '../utils/uuid'
 
-export class ConversationList extends React.Component {
+class ConversationList extends React.Component {
 
     static navigationOptions = {
         title: 'Conversation List'
@@ -10,6 +11,9 @@ export class ConversationList extends React.Component {
     render() {
 
         let {navigate} = this.props.navigation;
+
+        let uuid = getUUID();
+        console.log('UUID', uuid);
 
         return (
             <View style={styles.container}>
@@ -20,6 +24,8 @@ export class ConversationList extends React.Component {
         );
     }
 }
+
+export default ConversationList;
 
 const styles = StyleSheet.create({
     container: {

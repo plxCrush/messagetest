@@ -20,6 +20,15 @@ query AllUsers {
     }
 }`;
 
+export const createConversation = (createdAt, id, name) => gql`
+mutation CreateConversation {
+    createConversation(createdAt: "123123", id: "123123", name: "first") {
+        id
+        name
+        createdAt
+    }
+}`;
+
 // OPERATIONS
 export const operations = {
 

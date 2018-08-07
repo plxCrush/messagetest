@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-export class Chat extends React.Component {
+class Chat extends React.Component {
 
     static navigationOptions = {
         title: 'Chat Screen'
@@ -16,6 +16,8 @@ export class Chat extends React.Component {
         );
     }
 }
+
+export default Chat;
 
 const styles = StyleSheet.create({
     container: {

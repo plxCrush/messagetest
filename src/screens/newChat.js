@@ -1,29 +1,43 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import {compose} from "react-apollo";
+import * as GraphQL from "../graphql";
 
-export class NewChat extends React.Component {
+class NewChat extends React.Component {
 
     static navigationOptions = {
         title: 'Start New Chat'
     };
 
+    state = {
+      name: ''
+    };
+
+    create = () => {
+
+        alert(this.state.name);
+    };
+
     render() {
 
-        // console.log('DATA', console.log(this.props.data));
+        let {data} = this.props;
+        console.log(data);
 
         return (
             <View style={styles.container}>
-                <Text style={styles.welcome}>{"Start New Chat!"}</Text>
+                <Text style={styles.welcome}>{"Start New Conversation"}</Text>
+                <TextInput placeholder='Enter conversation name...'
+                           onChangeText={(name) => this.setState({name})}/>
+                <Button title='Create!'
+                        onPress={this.create}/>
             </View>
         );
     }
 }
 
-// export default compose(graphql(meQuery, {
-//     options: {
-//         fetchPolicy: 'cache-and-network'
-//     }
-// }))(NewChat);
+export default compose(
+    GraphQL.operations.AllUsers
+)(NewChat);
 
 const styles = StyleSheet.create({
     container: {

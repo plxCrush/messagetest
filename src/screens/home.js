@@ -12,16 +12,12 @@ class Home extends React.Component {
 
     render() {
 
-        // Auth.currentAuthenticatedUser()
-        //     .then(user => console.log('Current user', user))
-        //     .catch(err => console.log('Cant get cur user', err));
-
-       let {me} = this.props.data;
+       let {me, loading} = this.props.data;
 
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>Welcome Home!</Text>
-                <Text style={styles.user}>{me.username}</Text>
+                <Text style={styles.user}>{loading? 'Loading...' : me.username}</Text>
                 <Button title='Logout'
                         color='red'
                         onPress={() => Auth.signOut()}/>
