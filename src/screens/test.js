@@ -4,10 +4,10 @@ import {compose} from "react-apollo";
 import * as GraphQL from "../graphql";
 import {getUUID} from "../utils/uuid";
 
-class NewConversation extends React.Component {
+class Test extends React.Component {
 
     static navigationOptions = {
-        title: 'Start New Chat'
+        title: 'Test'
     };
 
     state = {
@@ -16,15 +16,7 @@ class NewConversation extends React.Component {
 
     create = () => {
 
-        let conversation = {
-          createdAt: new Date().toISOString(),
-          id: getUUID().toString(),
-          name: this.state.name.toString()
-            // createdAt: "12345678",
-            // id: "12345678",
-            // name: "NO NAME",
-        };
-        this.props.onCreateNewConversation(conversation)
+        this.props.onCreateTestPost(this.state.name)
             .then(data => {
                     console.log('SUCCESS', data);
                 },
@@ -34,13 +26,10 @@ class NewConversation extends React.Component {
 
     render() {
 
-        let {data} = this.props;
-        console.log('PROPS', this.props);
-
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>{"Start New Conversation"}</Text>
-                <TextInput placeholder='Enter conversation name...'
+                <TextInput placeholder='Enter Test Post name...'
                            onChangeText={(name) => this.setState({name})}/>
                 <Button title='Create!'
                         onPress={this.create}/>
@@ -50,8 +39,8 @@ class NewConversation extends React.Component {
 }
 
 export default compose(
-    GraphQL.operations.CreateConversation
-)(NewConversation);
+    GraphQL.operations.CreateTestPost
+)(Test);
 
 // export default NewConversation;
 

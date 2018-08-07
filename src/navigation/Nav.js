@@ -1,31 +1,33 @@
 import {createStackNavigator, createBottomTabNavigator} from 'react-navigation'
+import {ApolloHoc} from '../apollo/hoc'
 import Home from '../screens/home'
 import NewConversation from '../screens/newConversation'
 import ConversationList from '../screens/conversationList'
 import Chat from '../screens/chat'
 import AddUser from '../screens/addUser'
+import CreateTestPost from '../screens/test'
 
 let ChatStack = createStackNavigator({
     ConversationList: {
-        screen: ConversationList
+        screen: ApolloHoc(ConversationList)
     },
     Chat: {
-        screen: Chat
+        screen: ApolloHoc(Chat)
     },
     AddUser: {
-        screen: AddUser
+        screen: ApolloHoc(AddUser)
     }
 });
 
 let TabNav = createBottomTabNavigator({
     Home: {
-        screen: Home
+        screen: ApolloHoc(Home)
     },
     Conversations: {
         screen: ChatStack
     },
     NewConversation: {
-        screen: NewConversation
+        screen: ApolloHoc(NewConversation)
     },
 });
 
