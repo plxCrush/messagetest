@@ -1,6 +1,8 @@
 import {createStackNavigator, createBottomTabNavigator} from 'react-navigation'
-import {ConversationList, Chat, NewChat} from '../screens'
 import Home from '../screens/home'
+import NewChat from '../screens/newChat'
+import ConversationList from '../screens/conversationList'
+import Chat from '../screens/chat'
 
 let ChatStack = createStackNavigator({
     ConversationList: {
