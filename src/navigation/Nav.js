@@ -1,8 +1,9 @@
 import {createStackNavigator, createBottomTabNavigator} from 'react-navigation'
 import Home from '../screens/home'
-import NewChat from '../screens/newChat'
+import NewConversation from '../screens/newConversation'
 import ConversationList from '../screens/conversationList'
 import Chat from '../screens/chat'
+import AddUser from '../screens/addUser'
 
 let ChatStack = createStackNavigator({
     ConversationList: {
@@ -11,6 +12,9 @@ let ChatStack = createStackNavigator({
     Chat: {
         screen: Chat
     },
+    AddUser: {
+        screen: AddUser
+    }
 });
 
 let TabNav = createBottomTabNavigator({
@@ -20,8 +24,8 @@ let TabNav = createBottomTabNavigator({
     Conversations: {
         screen: ChatStack
     },
-    NewChat: {
-        screen: NewChat
+    NewConversation: {
+        screen: NewConversation
     },
 });
 

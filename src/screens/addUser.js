@@ -1,35 +1,31 @@
 import React from 'react';
-import {Button, FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {compose} from "react-apollo";
 import * as GraphQL from "../graphql";
 
-class ConversationList extends React.Component {
+class AddUser extends React.Component {
 
     static navigationOptions = {
-        title: 'Conversation List'
+        title: 'Add User'
     };
 
-    keyExtractor = (item) => item.conversation.id;
+    keyExtractor = (item) => item.id;
 
     renderItem = (info) => {
 
-        let conversation = info.item.conversation;
+        let user = info.item;
 
         return (
-            <TouchableOpacity onPress={() => alert(conversation.name)}>
-                <Text>{conversation.id+' - '+conversation.name}</Text>
+            <TouchableOpacity onPress={() => alert(user.username)}>
+                <Text>{user.id+' - '+user.username}</Text>
             </TouchableOpacity>
         )
     };
 
     render() {
 
-        // let {navigate} = this.props.navigation;
-
-        let {loading} = this.props.data;
-        let {userConversations} = this.props.data.me.conversations;
-
-        console.log('CONVERSATIONS DATA', this.props.data);
+        let {allUser, loading} = this.props.data;
+        console.log(data);
 
         if (loading)
             return (
@@ -40,9 +36,9 @@ class ConversationList extends React.Component {
 
         return (
             <View style={styles.container}>
-                <Text style={styles.welcome}>{"Your Conversations!"}</Text>
+                <Text style={styles.welcome}>{"Select user to add!"}</Text>
                 <FlatList style={styles.list}
-                          data={userConversations}
+                          data={allUser}
                           keyExtractor={this.keyExtractor}
                           renderItem={this.renderItem}/>
             </View>
@@ -51,8 +47,8 @@ class ConversationList extends React.Component {
 }
 
 export default compose(
-    GraphQL.operations.MyConversations
-)(ConversationList);
+    GraphQL.operations.AllUsers
+)(AddUser);
 
 const styles = StyleSheet.create({
     container: {

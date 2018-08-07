@@ -2,26 +2,37 @@ import React from 'react';
 import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
 import {compose} from "react-apollo";
 import * as GraphQL from "../graphql";
+import {getUUID} from "../utils/uuid";
+import gql from 'graphql-tag'
+import {graphql} from 'react-apollo'
 
-class NewChat extends React.Component {
+class NewConversation extends React.Component {
 
     static navigationOptions = {
         title: 'Start New Chat'
     };
 
     state = {
-      name: ''
+        name: ''
     };
 
     create = () => {
 
-        alert(this.state.name);
+        let conversation = {
+          createdAt: new Date().toDateString(),
+          id: getUUID(),
+          name: this.state.name
+        };
+        this.props.createConversation(conversation)
+            .then(data => console.log('SUCCESS', data),
+                error => console.log('ERROR', error))
+            .catch(err => console.log('ERR', err))
     };
 
     render() {
 
         let {data} = this.props;
-        console.log(data);
+        console.log('PROPS', this.props);
 
         return (
             <View style={styles.container}>
@@ -35,9 +46,11 @@ class NewChat extends React.Component {
     }
 }
 
-export default compose(
-    GraphQL.operations.AllUsers
-)(NewChat);
+// export default compose(
+//     GraphQL.operations.CreateConversation
+// )(NewConversation);
+
+export default NewConversation;
 
 const styles = StyleSheet.create({
     container: {
