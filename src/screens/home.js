@@ -21,10 +21,9 @@ class Home extends React.Component {
         Auth.currentAuthenticatedUser().then(
             user => {
                 let {payload} = user.signInUserSession.accessToken;
-                let cognitoId = payload.sub;
                 let id = payload.sub;
                 let username = payload.username;
-                this.props.onCreateUser({cognitoId, id, username})
+                this.props.onCreateUser({id, username})
                     .then(data => {
                             console.log('SUCCESS', data);
                             this.setState({loading: false});

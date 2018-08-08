@@ -21,17 +21,16 @@ mutation CreateTest2 ($name: String!, $details: String!) {
 }`;
 
 export const createUser = gql`
-mutation CreateUser ($cognitoId: String!, $id: String!, $username: String!) {
-    createUser(input: {cognitoId: $cognitoId, id: $id, username: $username}) {
+mutation CreateUser ($id: ID!, $username: String!) {
+    createUser(input: {id: $id, username: $username}) {
         __typename
-        cognitoId
         id
         username
     }
 }`;
 
 export const createConversation = gql`
-mutation CreateConversation ($id: String!, $createdAt: String!, $name: String!) {
+mutation CreateConversation ($id: ID!, $createdAt: String!, $name: String!) {
     createConversation(input: {id: $id, createdAt: $createdAt, name: $name}) {
         __typename
         id
@@ -41,7 +40,7 @@ mutation CreateConversation ($id: String!, $createdAt: String!, $name: String!) 
 }`;
 
 export const createUserConversation = gql`
-mutation CreateUserConversation ($conversationId: String!, $userId: String!) {
+mutation CreateUserConversation ($conversationId: ID!, $userId: ID!) {
     createUserConversation(input: {conversationId: $conversationId, userId: $userId}) {
         __typename
         conversationId
@@ -54,12 +53,12 @@ export const operations = {
 
     CreateUser: graphql(createUser, {
             props: (props) => ({
-                onCreateUser: ({cognitoId, id, username}) => {
+                onCreateUser: ({id, username}) => {
                     return props.mutate({
-                        variables: {cognitoId, id, username},
+                        variables: {id, username},
                         optimisticResponse: () => {
                             return {
-                                createUser: {cognitoId, id, username, __typename: "User"}
+                                createUser: {id, username, __typename: "User"}
                             }
                         },
                     });
