@@ -2,72 +2,35 @@ import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
 
 // QUERIES
-export const me = gql`
-query Me {
-    me {
-        id
-        cognitoId
-        username
-    }
-}`;
 
-export const allUsers = gql`
-query AllUsers {
-    allUser {
-        id
-        cognitoId
-        username
-    }
-}`;
-
-export const createConversation = gql`
-mutation createConversation ($createdAt: String!, $id: String!, $name: String!) {
-    createConversation(createdAt:$createdAt, id:$id, name:$name) {
-        __typename
-        id
-        name
-    }
-}`;
-
-
-export const myConversations = gql`
-query myConversations {
-  me {
-    id,
-    conversations {
-      nextToken
-      userConversations{
-        conversation {
-          __typename
-          id
-          name
-        }
-      }
-    }
-    username
-  }
-}
-`;
-
-export const testPost = gql`
-mutation CreateTestPost ($name: String!){
-  createTestPost(input: {name: $name}) {
+export const test1 = gql`
+mutation CreateTest1 ($name: String!) {
+  createTest1(input: {name: $name}) {
+    __typename
     name
   }
-}
-`;
+}`;
+
+export const test2 = gql`
+mutation CreateTest2 ($name: String!, $details: String!) {
+  createTest2(input: {name: $name, details: $details}) {
+    __typename
+    name
+    details
+  }
+}`;
 
 // OPERATIONS
 export const operations = {
 
-    CreateTestPost: graphql(testPost, {
+    CreateTest1: graphql(test1, {
         props: (props) => ({
-            onCreateTestPost: name => {
+            onCreate1: name => {
                 return props.mutate({
                     variables: {name},
                     optimisticResponse: () => {
                         return {
-                            createTestPost: {name}
+                            createTest1: {name, __typename: "Test1"}
                         }
                     },
                 });
@@ -76,82 +39,20 @@ export const operations = {
         }
     ),
 
-    Me: graphql(me, {
-        options: {
-            fetchPolicy: 'cache-and-network'
-        },
-    }),
-    AllUsers: graphql(allUsers, {
-        options: {
-            fetchPolicy: 'cache-and-network'
-        },
-    }),
-    CreateConversation: graphql(createConversation, {
+    CreateTest2: graphql(test2, {
             props: (props) => ({
-                onCreateNewConversation: conversation => {
+                onCreate2: ({name, details}) => {
                     return props.mutate({
-                        variables: conversation,
+                        variables: {name, details},
                         optimisticResponse: () => {
                             return {
-                                createConversation: {...conversation, __typename: 'Conversation'}
+                                createTest2: {name, details, __typename: "Test2"}
                             }
                         },
                     });
                 }
             })
-        // options: {
-        //     awaitRefetchQueries: true
-        // },
-        // props: (props) => ({
-        //     onAdd: conversation => {
-        //         console.log('ON ADD CONVERSATION', conversation);
-        //         console.log('PROPS MUTATE', props.mutate);
-        //         return props.mutate({
-        //             variables: conversation,
-        //             optimisticResponse: () => {
-        //                 return {
-        //                     createConversation: { ...conversation, __typename: 'Conversation', messages: { __typename:"MessageConnection",items:[], nextToken: null } }
-        //                 }
-        //             },
-        //         });
-        //     }
-        // })
-        // options: {
-        //     fetchPolicy: 'cache-and-network'
-        // },
-        // props: ({mutate}) => {
-        //     createConversation: conversation => mutate({variables: conversation})
-        // }
-        // options: {
-        //     refetchQueries: [{ query: myConversations }],
-        //     update: (dataProxy, { data: { createConversation } }) => {
-        //         const query = myConversations;
-        //         const data = dataProxy.readQuery({ query });
-        //         console.log('DATA IN UPDATE', data);
-        //         data.me.conversations.userConversations = {
-        //             ...data.me.conversations.userConversations,
-        //             createConversation
-        //         };
-        //         dataProxy.writeQuery({ query, data });
-        //     }
-        // },
-        // props: (props) => ({
-        //     createConversation: conversation => {
-        //         return props.mutate({
-        //             variables: conversation,
-        //             optimisticResponse: () => {
-        //                 return {
-        //                     createConversation: { ...conversation, __typename: 'Conversation' }
-        //                 }
-        //             },
-        //         });
-        //     }
-        // })
-    }),
-    MyConversations: graphql(myConversations, {
-        options: {
-            fetchPolicy: 'cache-and-network'
-        },
-    }),
+        }
+    ),
 
 };

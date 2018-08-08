@@ -10,14 +10,15 @@ class Home extends React.Component {
         title: 'Home'
     };
 
-    render() {
+    componentWillMount() {
 
-       let {me, loading} = this.props.data;
+    }
+
+    render() {
 
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>Welcome Home!</Text>
-                <Text style={styles.user}>{loading? 'Loading...' : me.username}</Text>
                 <Button title='Logout'
                         color='red'
                         onPress={() => Auth.signOut()}/>
@@ -26,9 +27,7 @@ class Home extends React.Component {
     }
 }
 
-export default compose(
-    GraphQL.operations.Me
-)(Home);
+export default Home;
 
 const styles = StyleSheet.create({
     container: {

@@ -49,11 +49,11 @@ class NewConversation extends React.Component {
     }
 }
 
-export default compose(
-    GraphQL.operations.CreateConversation
-)(NewConversation);
-
-// export default NewConversation;
+// export default compose(
+//     GraphQL.operations.CreateConversation
+// )(NewConversation);
+//
+export default NewConversation;
 
 const styles = StyleSheet.create({
     container: {

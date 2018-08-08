@@ -24,35 +24,23 @@ class ConversationList extends React.Component {
 
     render() {
 
-        // let {navigate} = this.props.navigation;
-
-        let {loading} = this.props.data;
-        let {userConversations} = this.props.data.me.conversations;
-
-        console.log('CONVERSATIONS DATA', this.props.data);
-
-        if (loading)
-            return (
-                <View style={styles.container}>
-                    <Text style={styles.welcome}>{"Loading..."}</Text>
-                </View>
-            );
-
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>{"Your Conversations!"}</Text>
-                <FlatList style={styles.list}
-                          data={userConversations}
-                          keyExtractor={this.keyExtractor}
-                          renderItem={this.renderItem}/>
+                {/*<FlatList style={styles.list}*/}
+                          {/*data={userConversations}*/}
+                          {/*keyExtractor={this.keyExtractor}*/}
+                          {/*renderItem={this.renderItem}/>*/}
             </View>
         );
     }
 }
 
-export default compose(
-    GraphQL.operations.MyConversations
-)(ConversationList);
+// export default compose(
+//     GraphQL.operations.MyConversations
+// )(ConversationList);
+
+export default ConversationList;
 
 const styles = StyleSheet.create({
     container: {

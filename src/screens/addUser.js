@@ -46,9 +46,11 @@ class AddUser extends React.Component {
     }
 }
 
-export default compose(
-    GraphQL.operations.AllUsers
-)(AddUser);
+// export default compose(
+//     GraphQL.operations.AllUsers
+// )(AddUser);
+
+export default AddUser;
 
 const styles = StyleSheet.create({
     container: {
