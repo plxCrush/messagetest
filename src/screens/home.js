@@ -12,6 +12,20 @@ class Home extends React.Component {
 
     componentWillMount() {
 
+        Auth.currentAuthenticatedUser().then(
+            user => {
+                let {payload} = user.signInUserSession.accessToken;
+                let cognitoId = payload.sub;
+                let id = payload.sub;
+                let username = payload.username;
+                this.props.onCreateUser({cognitoId, id, username})
+                    .then(data => {
+                            console.log('SUCCESS', data);
+                        },
+                        error => console.log('ERROR', error))
+                    .catch(err => console.log('ERR', err))
+            }
+        );
     }
 
     render() {
@@ -27,7 +41,9 @@ class Home extends React.Component {
     }
 }
 
-export default Home;
+export default compose(
+    GraphQL.operations.CreateUser,
+)(Home);
 
 const styles = StyleSheet.create({
     container: {

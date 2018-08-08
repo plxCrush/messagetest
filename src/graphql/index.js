@@ -20,8 +20,34 @@ mutation CreateTest2 ($name: String!, $details: String!) {
   }
 }`;
 
+export const createUser = gql`
+mutation CreateUser ($cognitoId: String!, $id: String!, $username: String!) {
+  createUser(input: {cognitoId: $cognitoId, id: $id, username: $username}) {
+    __typename
+    cognitoId
+    id
+    username
+  }
+}`;
+
 // OPERATIONS
 export const operations = {
+
+    CreateUser: graphql(createUser, {
+            props: (props) => ({
+                onCreateUser: ({cognitoId, id, username}) => {
+                    return props.mutate({
+                        variables: {cognitoId, id, username},
+                        optimisticResponse: () => {
+                            return {
+                                createUser: {cognitoId, id, username, __typename: "User"}
+                            }
+                        },
+                    });
+                }
+            })
+        }
+    ),
 
     CreateTest1: graphql(test1, {
         props: (props) => ({
