@@ -3,6 +3,7 @@ import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
 import {compose} from "react-apollo";
 import * as GraphQL from "../graphql";
 import {getUUID} from "../utils/uuid";
+import {Auth} from "aws-amplify/lib/index";
 
 class NewConversation extends React.Component {
 
@@ -16,26 +17,30 @@ class NewConversation extends React.Component {
 
     create = () => {
 
-        let conversation = {
-          createdAt: new Date().toISOString(),
-          id: getUUID().toString(),
-          name: this.state.name.toString()
-            // createdAt: "12345678",
-            // id: "12345678",
-            // name: "NO NAME",
-        };
-        this.props.onCreateNewConversation(conversation)
-            .then(data => {
-                    console.log('SUCCESS', data);
-                },
-                error => console.log('ERROR', error))
-            .catch(err => console.log('ERR', err))
+        Auth.currentAuthenticatedUser().then(
+            user => {
+                let {payload} = user.signInUserSession.accessToken;
+                let userId = payload.sub;
+                let {name} = this.state;
+                let id = getUUID();
+                let createdAt = new Date().toISOString();
+                this.props.onCreateConversation({id, createdAt, name})
+                    .then(data => {
+                            console.log('SUCCESS', data);
+                            this.props.onCreateUserConversation({conversationId: id, userId})
+                                .then(data => {
+                                        console.log('SUCCESS', data);
+
+                                    },
+                                    error => console.log('ERROR', error))
+                                .catch(err => console.log('ERR', err))
+                        },
+                        error => console.log('ERROR', error))
+                    .catch(err => console.log('ERR', err))
+            });
     };
 
     render() {
-
-        let {data} = this.props;
-        console.log('PROPS', this.props);
 
         return (
             <View style={styles.container}>
@@ -49,11 +54,11 @@ class NewConversation extends React.Component {
     }
 }
 
-// export default compose(
-//     GraphQL.operations.CreateConversation
-// )(NewConversation);
-//
-export default NewConversation;
+export default compose(
+    GraphQL.operations.CreateConversation,
+    GraphQL.operations.CreateUserConversation
+)(NewConversation);
+
 
 const styles = StyleSheet.create({
     container: {

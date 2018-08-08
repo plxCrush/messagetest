@@ -10,8 +10,14 @@ class Home extends React.Component {
         title: 'Home'
     };
 
+    state = {
+        loading: false,
+        username: ''
+    };
+
     componentWillMount() {
 
+        this.setState({loading: true});
         Auth.currentAuthenticatedUser().then(
             user => {
                 let {payload} = user.signInUserSession.accessToken;
@@ -21,18 +27,28 @@ class Home extends React.Component {
                 this.props.onCreateUser({cognitoId, id, username})
                     .then(data => {
                             console.log('SUCCESS', data);
+                            this.setState({loading: false});
+                            this.setState({username})
                         },
-                        error => console.log('ERROR', error))
-                    .catch(err => console.log('ERR', err))
+                        error => this.setState({loading: false}))
+                    .catch(err => this.setState({loading: false}))
             }
         );
     }
 
     render() {
 
+        let {loading, username} = this.state;
+
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>Welcome Home!</Text>
+                {
+                    loading ?
+                        <Text>Loading...</Text>
+                        :
+                        <Text style={styles.user}>{username}</Text>
+                }
                 <Button title='Logout'
                         color='red'
                         onPress={() => Auth.signOut()}/>

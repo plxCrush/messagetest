@@ -30,6 +30,25 @@ mutation CreateUser ($cognitoId: String!, $id: String!, $username: String!) {
     }
 }`;
 
+export const createConversation = gql`
+mutation CreateConversation ($id: String!, $createdAt: String!, $name: String!) {
+    createConversation(input: {id: $id, createdAt: $createdAt, name: $name}) {
+        __typename
+        id
+        name
+        createdAt
+    }
+}`;
+
+export const createUserConversation = gql`
+mutation CreateUserConversation ($conversationId: String!, $userId: String!) {
+    createUserConversation(input: {conversationId: $conversationId, userId: $userId}) {
+        __typename
+        conversationId
+        userId
+    }
+}`;
+
 // OPERATIONS
 export const operations = {
 
@@ -41,6 +60,38 @@ export const operations = {
                         optimisticResponse: () => {
                             return {
                                 createUser: {cognitoId, id, username, __typename: "User"}
+                            }
+                        },
+                    });
+                }
+            })
+        }
+    ),
+
+    CreateConversation: graphql(createConversation, {
+            props: (props) => ({
+                onCreateConversation: ({id, createdAt, name}) => {
+                    return props.mutate({
+                        variables: {id, createdAt, name},
+                        optimisticResponse: () => {
+                            return {
+                                createConversation: {id, createdAt, name, __typename: "Conversation"}
+                            }
+                        },
+                    });
+                }
+            })
+        }
+    ),
+
+    CreateUserConversation: graphql(createUserConversation, {
+            props: (props) => ({
+                onCreateUserConversation: ({conversationId, userId}) => {
+                    return props.mutate({
+                        variables: {conversationId, userId},
+                        optimisticResponse: () => {
+                            return {
+                                createUserConversation: {conversationId, userId, __typename: "UserConversation"}
                             }
                         },
                     });
