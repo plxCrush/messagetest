@@ -5,29 +5,29 @@ import {graphql} from 'react-apollo'
 
 export const test1 = gql`
 mutation CreateTest1 ($name: String!) {
-  createTest1(input: {name: $name}) {
-    __typename
-    name
-  }
+    createTest1(input: {name: $name}) {
+        __typename
+        name
+    }
 }`;
 
 export const test2 = gql`
 mutation CreateTest2 ($name: String!, $details: String!) {
-  createTest2(input: {name: $name, details: $details}) {
-    __typename
-    name
-    details
-  }
+    createTest2(input: {name: $name, details: $details}) {
+        __typename
+        name
+        details
+    }
 }`;
 
 export const createUser = gql`
 mutation CreateUser ($cognitoId: String!, $id: String!, $username: String!) {
-  createUser(input: {cognitoId: $cognitoId, id: $id, username: $username}) {
-    __typename
-    cognitoId
-    id
-    username
-  }
+    createUser(input: {cognitoId: $cognitoId, id: $id, username: $username}) {
+        __typename
+        cognitoId
+        id
+        username
+    }
 }`;
 
 // OPERATIONS
