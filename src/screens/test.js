@@ -11,12 +11,24 @@ class Test extends React.Component {
     };
 
     state = {
-        name: ''
+        name: '',
+        details: ''
     };
 
-    create = () => {
+    create1 = () => {
 
-        this.props.onCreateTestPost(this.state.name)
+        this.props.onCreate1(this.state.name)
+            .then(data => {
+                    console.log('SUCCESS', data);
+                },
+                error => console.log('ERROR', error))
+            .catch(err => console.log('ERR', err))
+    };
+
+    create2 = () => {
+
+        let {name, details} = this.state;
+        this.props.onCreate2({name, details})
             .then(data => {
                     console.log('SUCCESS', data);
                 },
@@ -29,20 +41,25 @@ class Test extends React.Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>{"Start New Conversation"}</Text>
-                <TextInput placeholder='Enter Test Post name...'
+                <TextInput placeholder='Enter Test 1/2 name...'
                            onChangeText={(name) => this.setState({name})}/>
-                <Button title='Create!'
-                        onPress={this.create}/>
+                <TextInput placeholder='Enter Test 2 details...'
+                           onChangeText={(details) => this.setState({details})}/>
+                <Button title='Create 1!'
+                        onPress={this.create1}/>
+                <Button title='Create 2!'
+                        onPress={this.create2}/>
             </View>
         );
     }
 }
 
 export default compose(
-    GraphQL.operations.CreateTestPost
+    GraphQL.operations.CreateTest1,
+    GraphQL.operations.CreateTest2
 )(Test);
 
-// export default NewConversation;
+// export default Test;
 
 const styles = StyleSheet.create({
     container: {
