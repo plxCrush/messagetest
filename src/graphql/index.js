@@ -30,18 +30,17 @@ mutation CreateUser ($id: ID!, $username: String!) {
 }`;
 
 export const createConversation = gql`
-mutation CreateConversation ($id: ID!, $createdAt: String!, $name: String!) {
-    createConversation(input: {id: $id, createdAt: $createdAt, name: $name}) {
+mutation CreateConversation ($id: ID!, $name: String!) {
+    createConversation(input: {id: $id, name: $name}) {
         __typename
         id
         name
-        createdAt
     }
 }`;
 
-export const createUserConversation = gql`
-mutation CreateUserConversation ($conversationId: ID!, $userId: ID!) {
-    createUserConversation(input: {conversationId: $conversationId, userId: $userId}) {
+export const createUserConversations = gql`
+mutation CreateUserConversations ($conversationId: ID!, $userId: ID!) {
+    createUserConversations(input: {conversationId: $conversationId, userId: $userId}) {
         __typename
         conversationId
         userId
@@ -69,12 +68,12 @@ export const operations = {
 
     CreateConversation: graphql(createConversation, {
             props: (props) => ({
-                onCreateConversation: ({id, createdAt, name}) => {
+                onCreateConversation: ({id, name}) => {
                     return props.mutate({
-                        variables: {id, createdAt, name},
+                        variables: {id, name},
                         optimisticResponse: () => {
                             return {
-                                createConversation: {id, createdAt, name, __typename: "Conversation"}
+                                createConversation: {id, name, __typename: "Conversation"}
                             }
                         },
                     });
@@ -83,14 +82,14 @@ export const operations = {
         }
     ),
 
-    CreateUserConversation: graphql(createUserConversation, {
+    CreateUserConversations: graphql(createUserConversations, {
             props: (props) => ({
-                onCreateUserConversation: ({conversationId, userId}) => {
+                onCreateUserConversations: ({conversationId, userId}) => {
                     return props.mutate({
                         variables: {conversationId, userId},
                         optimisticResponse: () => {
                             return {
-                                createUserConversation: {conversationId, userId, __typename: "UserConversation"}
+                                createUserConversations: {conversationId, userId, __typename: "UserConversation"}
                             }
                         },
                     });

@@ -23,11 +23,10 @@ class NewConversation extends React.Component {
                 let userId = payload.sub;
                 let {name} = this.state;
                 let id = getUUID();
-                let createdAt = new Date().toISOString();
-                this.props.onCreateConversation({id, createdAt, name})
+                this.props.onCreateConversation({id, name})
                     .then(data => {
                             console.log('SUCCESS', data);
-                            this.props.onCreateUserConversation({conversationId: id, userId})
+                            this.props.onCreateUserConversations({conversationId: id, userId})
                                 .then(data => {
                                         console.log('SUCCESS', data);
 
@@ -56,7 +55,7 @@ class NewConversation extends React.Component {
 
 export default compose(
     GraphQL.operations.CreateConversation,
-    GraphQL.operations.CreateUserConversation
+    GraphQL.operations.CreateUserConversations
 )(NewConversation);
 
 
