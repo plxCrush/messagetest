@@ -9,6 +9,19 @@ class AddUser extends React.Component {
         title: 'Add User'
     };
 
+    handleAdd = (userId) => {
+
+        let {conversation} = this.props.navigation.state.params;
+
+        this.props.onCreateUserConversations({conversationId: conversation.id, userId})
+            .then(data => {
+                    console.log('SUCCESS', data);
+
+                },
+                error => console.log('ERROR', error))
+            .catch(err => console.log('ERR', err))
+    };
+
     keyExtractor = (item) => item.id;
 
     renderItem = (info) => {
@@ -16,16 +29,15 @@ class AddUser extends React.Component {
         let user = info.item;
 
         return (
-            <TouchableOpacity onPress={() => alert(user.username)}>
-                <Text>{user.id+' - '+user.username}</Text>
+            <TouchableOpacity onPress={(e => this.handleAdd(user.id))}>
+                <Text>{user.username}</Text>
             </TouchableOpacity>
         )
     };
 
     render() {
 
-        let {allUser, loading} = this.props.data;
-        console.log(data);
+        let {users, loading} = this.props;
 
         if (loading)
             return (
@@ -38,7 +50,7 @@ class AddUser extends React.Component {
             <View style={styles.container}>
                 <Text style={styles.welcome}>{"Select user to add!"}</Text>
                 <FlatList style={styles.list}
-                          data={allUser}
+                          data={users}
                           keyExtractor={this.keyExtractor}
                           renderItem={this.renderItem}/>
             </View>
@@ -46,11 +58,12 @@ class AddUser extends React.Component {
     }
 }
 
-// export default compose(
-//     GraphQL.operations.AllUsers
-// )(AddUser);
+export default compose(
+    GraphQL.operations.AllUser,
+    GraphQL.operations.CreateUserConversations,
+)(AddUser);
 
-export default AddUser;
+// export default AddUser;
 
 const styles = StyleSheet.create({
     container: {

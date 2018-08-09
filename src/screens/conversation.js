@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 class Conversation extends React.Component {
 
@@ -13,6 +13,9 @@ class Conversation extends React.Component {
 
         return (
             <View style={styles.container}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('AddUser', {conversation})}>
+                    <Text style={styles.addUser}>Add User</Text>
+                </TouchableOpacity>
                 <Text style={styles.welcome}>{conversation.name}</Text>
             </View>
         );
@@ -32,5 +35,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         margin: 10,
+    },
+    addUser: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: 10,
+        color: 'green'
     }
 });

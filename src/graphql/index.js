@@ -77,20 +77,35 @@ mutation CreateUserConversations ($conversationId: ID!, $userId: ID!) {
 
 export const me = gql`
 query Me {
-  me {
-    id
-    username
-    conversations {
-      userConversations {
-        conversation {
-          id
-          name
+    me {
+        id
+        username
+        conversations {
+            userConversations {
+                conversation {
+                    id
+                    name
+                }
+            }
         }
-      }
     }
-  }
-}
-`;
+}`;
+
+export const allUser = gql`
+query AllUser {
+    allUser {
+        id
+        username
+        conversations {
+            userConversations {
+                conversation {
+                    id
+                    name
+                }
+            }
+        }
+    }
+}`;
 
 // OPERATIONS
 export const operations = {
@@ -150,6 +165,16 @@ export const operations = {
         props: (props) => ({
             conversations: props.data.me.conversations ? props.data.me.conversations.userConversations : [],
             me: props.data.me,
+            loading: props.data.loading
+        }),
+    }),
+
+    AllUser: graphql(allUser, {
+        options: {
+            fetchPolicy: 'cache-and-network'
+        },
+        props: (props) => ({
+            users: props.data.allUser,
             loading: props.data.loading
         }),
     }),
