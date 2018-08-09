@@ -80,6 +80,14 @@ query Me {
     me {
         id
         username
+    }
+}`;
+
+export const myConversations = gql`
+query Me {
+    me {
+        id
+        username
         conversations {
             userConversations {
                 conversation {
@@ -163,8 +171,17 @@ export const operations = {
             fetchPolicy: 'cache-and-network'
         },
         props: (props) => ({
-            conversations: props.data.me.conversations ? props.data.me.conversations.userConversations : [],
             me: props.data.me,
+            loading: props.data.loading
+        }),
+    }),
+
+    MyConversations: graphql(myConversations, {
+        options: {
+            fetchPolicy: 'cache-and-network'
+        },
+        props: (props) => ({
+            conversations: props.data.me.conversations ? props.data.me.conversations.userConversations : [],
             loading: props.data.loading
         }),
     }),

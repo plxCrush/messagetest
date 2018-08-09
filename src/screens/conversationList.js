@@ -49,7 +49,7 @@ class ConversationList extends React.Component {
 }
 
 export default compose(
-    GraphQL.operations.Me
+    GraphQL.operations.MyConversations
 )(ConversationList);
 
 // export default ConversationList;
