@@ -135,6 +135,26 @@ mutation CreateMessage(
     }
 }`;
 
+export const allMessage = gql`
+query AllMessage($conversationId: ID!) {
+    allMessage(conversationId: $conversationId) {
+        __typename
+        content
+        sender
+        isSent
+    }
+}`;
+
+export const subscribeToNewMessage = gql`
+subscription SubscribeToNewMessage($conversationId: ID!) {
+    subscribeToNewMessage(conversationId: $conversationId) {
+        __typename
+        content
+        sender
+        isSent
+    }
+}`;
+
 
 // OPERATIONS
 export const operations = {
@@ -218,20 +238,72 @@ export const operations = {
     }),
 
     CreateMessage: graphql(createMessage, {
-            props: (props) => ({
-                onCreateMessage: ({content, conversationId, createdAt, id}) => {
-                    return props.mutate({
-                        variables: {content, conversationId, createdAt, id},
-                        optimisticResponse: () => {
-                            return {
-                                createMessage: {content, conversationId, createdAt, id,  __typename: "Message"}
-                            }
-                        },
-                    });
-                }
-            })
+        options: props => ({
+            fetchPolicy: 'cache-and-network',
+            // update: (proxy, {data: {createMessage}}) => {
+            //     const query = allMessage;
+            //     const variables = {conversationId: props.conversationId};
+            //     const data = proxy.readQuery({query, variables});
+            //     data.allMessage = {
+            //         ...data.allMessage.filter(c => {
+            //             return c.content !== createMessage.content &&
+            //                 c.createdAt !== createMessage.createdAt
+            //         }),
+            //         createMessage,
+            //     };
+            //     proxy.writeQuery({query, data});
+            // },
+        }),
+        props: (props) => ({
+            onCreateMessage: ({content, conversationId, createdAt, id}) => {
+                return props.mutate({
+                    variables: {content, conversationId, createdAt, id},
+                    optimisticResponse: () => {
+                        return {
+                            createMessage: {content, conversationId, createdAt, id, __typename: "Message"}
+                        }
+                    }
+                })
+            }
+        }),
+    }),
+
+    AllMessage: graphql(allMessage, {
+        options: (ownProps) => ({
+            fetchPolicy: 'cache-and-network',
+            variables: {
+                conversationId: ownProps.navigation.state.params.conversation.id,
+            }
+        }),
+        props: props => {
+            return {
+                messages: props.data.allMessage,
+                // subscribeToNewMessage: (conversationId) => {
+                //     props.data.subscribeToMore({
+                //         document: subscribeToNewMessage,
+                //         variables: {
+                //             conversationId: conversationId,
+                //         },
+                //         updateQuery: (prev, { subscriptionData: { data: { subscribeToNewMessage } } }) => {
+                //             const res = {
+                //                 ...prev,
+                //                 allMessage: {
+                //                     ...prev.allMessage.filter(c => {
+                //                                 return (
+                //                                     c.content !== subscribeToNewMessage.content &&
+                //                                     c.createdAt !== subscribeToNewMessage.createdAt
+                //                                 )
+                //                             }),
+                //                             subscribeToNewMessage,
+                //                 },
+                //             };
+                //             return res;
+                //         }
+                //     })
+                // }
+            }
         }
-    ),
+    }),
 
     // CreateUser: graphql(createUser, {
     //         props: (props) => ({

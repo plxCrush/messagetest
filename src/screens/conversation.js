@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, StyleSheet, Text, TouchableOpacity, View, TextInput} from 'react-native';
+import {Button, StyleSheet, Text, TouchableOpacity, View, TextInput, FlatList} from 'react-native';
 import * as GraphQL from "../graphql";
 import {compose} from "react-apollo";
 import {getUUID} from "../utils/uuid";
@@ -14,13 +14,19 @@ class Conversation extends React.Component {
         newMessageText: ''
     };
 
+    componentDidMount() {
+
+        // this.props.subscribeToNewMessage();
+    }
+
     send = () => {
 
+        let {conversation} = this.props.navigation.state.params;
         let {newMessageText} = this.state;
         let createdAt = new Date().toISOString();
         let id = getUUID();
 
-        this.props.onCreateMessage({content: newMessageText, conversationId: id, createdAt, id})
+        this.props.onCreateMessage({content: newMessageText, conversationId: conversation.id, createdAt, id})
             .then(data => {
                     console.log('SUCCESS', data);
                     this.setState({newMessageText: ''})
@@ -29,10 +35,26 @@ class Conversation extends React.Component {
             .catch(err => console.log('ERR', err))
     };
 
+    keyExtractor = (item) => item.id;
+
+    renderItem = (info) => {
+
+        let message = info.item;
+
+        return (
+            <View style={styles.messageContainer}>
+                <Text style={styles.sender}>{message.sender}</Text>
+                <Text style={styles.content}>{message.content}</Text>
+            </View>
+        )
+    };
+
     render() {
 
         let {conversation} = this.props.navigation.state.params;
         let {newMessageText} = this.state;
+        console.log('PROPS', this.props);
+        let {messages} = this.props;
 
         return (
             <View style={styles.container}>
@@ -41,9 +63,10 @@ class Conversation extends React.Component {
                 </TouchableOpacity>
                 <Text style={styles.welcome}>{conversation.name}</Text>
 
-                <View style={{flex: 1}}>
-                </View>
-                {/*PUT MESSAGE FLAT LIST HERE*/}
+                <FlatList style={styles.list}
+                          data={messages}
+                          keyExtractor={this.keyExtractor}
+                          renderItem={this.renderItem}/>
 
                 <View style={styles.newMessageContainer}>
                     <TextInput placeholder='Enter message here...'
@@ -61,6 +84,7 @@ class Conversation extends React.Component {
 }
 
 export default compose(
+    GraphQL.operations.AllMessage,
     GraphQL.operations.CreateMessage
 )(Conversation);
 
@@ -83,8 +107,23 @@ const styles = StyleSheet.create({
         margin: 10,
         color: 'green'
     },
+    list: {
+        flex: 1
+    },
     newMessageContainer: {
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    messageContainer: {
+        flex: 1,
+        margin: 8
+    },
+    sender: {
+        fontSize: 12,
+        color: 'blue'
+    },
+    content: {
+        fontSize: 16,
+        color: 'gray'
     }
 });
