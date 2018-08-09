@@ -20,10 +20,20 @@ class Home extends React.Component {
         this.setState({loading: true});
         Auth.currentAuthenticatedUser().then(
             user => {
+                // let {payload} = user.signInUserSession.accessToken;
+                // let id = payload.sub;
+                // let username = payload.username;
+                // this.props.onCreateUser({id, username})
+                //     .then(data => {
+                //             console.log('SUCCESS', data);
+                //             this.setState({loading: false});
+                //             this.setState({username})
+                //         },
+                //         error => this.setState({loading: false}))
+                //     .catch(err => this.setState({loading: false}))
                 let {payload} = user.signInUserSession.accessToken;
-                let id = payload.sub;
                 let username = payload.username;
-                this.props.onCreateUser({id, username})
+                this.props.onCreateUser({username})
                     .then(data => {
                             console.log('SUCCESS', data);
                             this.setState({loading: false});

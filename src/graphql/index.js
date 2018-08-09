@@ -3,6 +3,34 @@ import {graphql} from 'react-apollo'
 
 // QUERIES
 
+// -Commented below were used for MyChatApp api -
+// export const createUser = gql`
+// mutation CreateUser ($id: ID!, $username: String!) {
+//     createUser(input: {id: $id, username: $username}) {
+//         __typename
+//         id
+//         username
+//     }
+// }`;
+//
+// export const createConversation = gql`
+// mutation CreateConversation ($id: ID!, $name: String!) {
+//     createConversation(input: {id: $id, name: $name}) {
+//         __typename
+//         id
+//         name
+//     }
+// }`;
+//
+// export const createUserConversations = gql`
+// mutation CreateUserConversations ($conversationId: ID!, $userId: ID!) {
+//     createUserConversations(input: {conversationId: $conversationId, userId: $userId}) {
+//         __typename
+//         conversationId
+//         userId
+//     }
+// }`;
+
 export const test1 = gql`
 mutation CreateTest1 ($name: String!) {
     createTest1(input: {name: $name}) {
@@ -20,44 +48,27 @@ mutation CreateTest2 ($name: String!, $details: String!) {
     }
 }`;
 
+
 export const createUser = gql`
-mutation CreateUser ($id: ID!, $username: String!) {
-    createUser(input: {id: $id, username: $username}) {
+mutation CreateUser ($username: String!) {
+    createUser(username: $username) {
         __typename
-        id
         username
     }
 }`;
 
-export const createConversation = gql`
-mutation CreateConversation ($id: ID!, $name: String!) {
-    createConversation(input: {id: $id, name: $name}) {
-        __typename
-        id
-        name
-    }
-}`;
-
-export const createUserConversations = gql`
-mutation CreateUserConversations ($conversationId: ID!, $userId: ID!) {
-    createUserConversations(input: {conversationId: $conversationId, userId: $userId}) {
-        __typename
-        conversationId
-        userId
-    }
-}`;
 
 // OPERATIONS
 export const operations = {
 
     CreateUser: graphql(createUser, {
             props: (props) => ({
-                onCreateUser: ({id, username}) => {
+                onCreateUser: ({username}) => {
                     return props.mutate({
-                        variables: {id, username},
+                        variables: {username},
                         optimisticResponse: () => {
                             return {
-                                createUser: {id, username, __typename: "User"}
+                                createUser: {username, __typename: "User"}
                             }
                         },
                     });
@@ -66,37 +77,53 @@ export const operations = {
         }
     ),
 
-    CreateConversation: graphql(createConversation, {
-            props: (props) => ({
-                onCreateConversation: ({id, name}) => {
-                    return props.mutate({
-                        variables: {id, name},
-                        optimisticResponse: () => {
-                            return {
-                                createConversation: {id, name, __typename: "Conversation"}
-                            }
-                        },
-                    });
-                }
-            })
-        }
-    ),
-
-    CreateUserConversations: graphql(createUserConversations, {
-            props: (props) => ({
-                onCreateUserConversations: ({conversationId, userId}) => {
-                    return props.mutate({
-                        variables: {conversationId, userId},
-                        optimisticResponse: () => {
-                            return {
-                                createUserConversations: {conversationId, userId, __typename: "UserConversation"}
-                            }
-                        },
-                    });
-                }
-            })
-        }
-    ),
+    // CreateUser: graphql(createUser, {
+    //         props: (props) => ({
+    //             onCreateUser: ({id, username}) => {
+    //                 return props.mutate({
+    //                     variables: {id, username},
+    //                     optimisticResponse: () => {
+    //                         return {
+    //                             createUser: {id, username, __typename: "User"}
+    //                         }
+    //                     },
+    //                 });
+    //             }
+    //         })
+    //     }
+    // ),
+    //
+    // CreateConversation: graphql(createConversation, {
+    //         props: (props) => ({
+    //             onCreateConversation: ({id, name}) => {
+    //                 return props.mutate({
+    //                     variables: {id, name},
+    //                     optimisticResponse: () => {
+    //                         return {
+    //                             createConversation: {id, name, __typename: "Conversation"}
+    //                         }
+    //                     },
+    //                 });
+    //             }
+    //         })
+    //     }
+    // ),
+    //
+    // CreateUserConversations: graphql(createUserConversations, {
+    //         props: (props) => ({
+    //             onCreateUserConversations: ({conversationId, userId}) => {
+    //                 return props.mutate({
+    //                     variables: {conversationId, userId},
+    //                     optimisticResponse: () => {
+    //                         return {
+    //                             createUserConversations: {conversationId, userId, __typename: "UserConversation"}
+    //                         }
+    //                     },
+    //                 });
+    //             }
+    //         })
+    //     }
+    // ),
 
     CreateTest1: graphql(test1, {
         props: (props) => ({
