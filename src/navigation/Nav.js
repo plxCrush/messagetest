@@ -5,7 +5,6 @@ import NewConversation from '../screens/newConversation'
 import ConversationList from '../screens/conversationList'
 import Conversation from '../screens/conversation'
 import AddUser from '../screens/addUser'
-import Test from '../screens/test'
 
 let ChatStack = createStackNavigator({
     ConversationList: {
