@@ -139,6 +139,7 @@ export const allMessage = gql`
 query AllMessage($conversationId: ID!) {
     allMessage(conversationId: $conversationId) {
         __typename
+        id
         content
         sender
         isSent

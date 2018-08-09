@@ -40,10 +40,21 @@ class Conversation extends React.Component {
     renderItem = (info) => {
 
         let message = info.item;
+        let isMine = this.props.me.id === message.sender;
+
+        let container = {
+            flex: 1,
+            margin: 10,
+            justifyContent: isMine? 'flex-end' : 'flex-start'
+        };
+        let  sender = {
+            fontSize: 12,
+            color: isMine ? 'green' : 'blue'
+        };
 
         return (
-            <View style={styles.messageContainer}>
-                <Text style={styles.sender}>{message.sender}</Text>
+            <View style={container}>
+                <Text style={sender}>{message.sender}</Text>
                 <Text style={styles.content}>{message.content}</Text>
             </View>
         )
@@ -84,6 +95,7 @@ class Conversation extends React.Component {
 }
 
 export default compose(
+    GraphQL.operations.Me,
     GraphQL.operations.AllMessage,
     GraphQL.operations.CreateMessage
 )(Conversation);
@@ -93,7 +105,7 @@ export default compose(
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
+        // alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
     welcome: {
@@ -112,15 +124,12 @@ const styles = StyleSheet.create({
     },
     newMessageContainer: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     messageContainer: {
         flex: 1,
         margin: 8
-    },
-    sender: {
-        fontSize: 12,
-        color: 'blue'
     },
     content: {
         fontSize: 16,
