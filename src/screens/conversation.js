@@ -1,10 +1,20 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Button, StyleSheet, Text, TouchableOpacity, View, TextInput} from 'react-native';
 
 class Conversation extends React.Component {
 
     static navigationOptions = {
         title: 'Chat Screen'
+    };
+
+    state = {
+        newMessageText: ''
+    };
+
+    send = () => {
+
+        let {newMessageText} = this.state;
+        alert(newMessageText);
     };
 
     render() {
@@ -17,6 +27,21 @@ class Conversation extends React.Component {
                     <Text style={styles.addUser}>Add User</Text>
                 </TouchableOpacity>
                 <Text style={styles.welcome}>{conversation.name}</Text>
+
+                <View style={{flex: 1}}>
+                </View>
+                {/*PUT MESSAGE FLAT LIST HERE*/}
+
+                <View style={styles.newMessageContainer}>
+                    <TextInput
+                              placeholder='Enter message here...'
+                              onChangeText={(newMessageText) => this.setState({newMessageText})}
+                    />
+                    <Button title='Send!'
+                            onPress={this.send}/>
+
+                </View>
+
             </View>
         );
     }
@@ -27,7 +52,6 @@ export default Conversation;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
@@ -41,5 +65,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         margin: 10,
         color: 'green'
+    },
+    newMessageContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
     }
 });
