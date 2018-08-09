@@ -1,5 +1,8 @@
 import React from 'react';
 import {Button, StyleSheet, Text, TouchableOpacity, View, TextInput} from 'react-native';
+import * as GraphQL from "../graphql";
+import {compose} from "react-apollo";
+import {getUUID} from "../utils/uuid";
 
 class Conversation extends React.Component {
 
@@ -14,12 +17,22 @@ class Conversation extends React.Component {
     send = () => {
 
         let {newMessageText} = this.state;
-        alert(newMessageText);
+        let createdAt = new Date().toISOString();
+        let id = getUUID();
+
+        this.props.onCreateMessage({content: newMessageText, conversationId: id, createdAt, id})
+            .then(data => {
+                    console.log('SUCCESS', data);
+                    this.setState({newMessageText: ''})
+                },
+                error => console.log('ERROR', error))
+            .catch(err => console.log('ERR', err))
     };
 
     render() {
 
         let {conversation} = this.props.navigation.state.params;
+        let {newMessageText} = this.state;
 
         return (
             <View style={styles.container}>
@@ -33,9 +46,9 @@ class Conversation extends React.Component {
                 {/*PUT MESSAGE FLAT LIST HERE*/}
 
                 <View style={styles.newMessageContainer}>
-                    <TextInput
-                              placeholder='Enter message here...'
-                              onChangeText={(newMessageText) => this.setState({newMessageText})}
+                    <TextInput placeholder='Enter message here...'
+                               value={newMessageText}
+                               onChangeText={(newMessageText) => this.setState({newMessageText})}
                     />
                     <Button title='Send!'
                             onPress={this.send}/>
@@ -47,7 +60,11 @@ class Conversation extends React.Component {
     }
 }
 
-export default Conversation;
+export default compose(
+    GraphQL.operations.CreateMessage
+)(Conversation);
+
+// export default Conversation;
 
 const styles = StyleSheet.create({
     container: {

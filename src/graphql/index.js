@@ -115,6 +115,26 @@ query AllUser {
     }
 }`;
 
+export const createMessage = gql`
+mutation CreateMessage(
+    $content: String,
+    $conversationId: ID!,
+    $createdAt: String!,
+    $id: ID!) {
+    createMessage(
+        content: $content,
+        conversationId: $conversationId,
+        createdAt: $createdAt,
+        id: $id
+    ) {
+        __typename
+        content
+        createdAt
+        conversationId
+        id
+    }
+}`;
+
 
 // OPERATIONS
 export const operations = {
@@ -196,6 +216,22 @@ export const operations = {
             loading: props.data.loading
         }),
     }),
+
+    CreateMessage: graphql(createMessage, {
+            props: (props) => ({
+                onCreateMessage: ({content, conversationId, createdAt, id}) => {
+                    return props.mutate({
+                        variables: {content, conversationId, createdAt, id},
+                        optimisticResponse: () => {
+                            return {
+                                createMessage: {content, conversationId, createdAt, id,  __typename: "Message"}
+                            }
+                        },
+                    });
+                }
+            })
+        }
+    ),
 
     // CreateUser: graphql(createUser, {
     //         props: (props) => ({

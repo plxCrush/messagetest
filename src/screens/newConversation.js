@@ -3,7 +3,7 @@ import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
 import {compose} from "react-apollo";
 import * as GraphQL from "../graphql";
 import {getUUID} from "../utils/uuid";
-import {Auth} from "aws-amplify/lib/index";
+import {Auth} from "aws-amplify";
 
 class NewConversation extends React.Component {
 
