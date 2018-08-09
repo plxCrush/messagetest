@@ -17,30 +17,41 @@ class ConversationList extends React.Component {
 
         return (
             <TouchableOpacity onPress={() => alert(conversation.name)}>
-                <Text>{conversation.id+' - '+conversation.name}</Text>
+                <Text>{conversation.name}</Text>
             </TouchableOpacity>
         )
     };
 
     render() {
 
+        let {conversations} = this.props;
+        let {loading} = this.props;
+
+        if (loading) {
+            return (
+                <View style={styles.container}>
+                    <Text>Loading...</Text>
+                </View>
+            )
+        }
+
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>{"Your Conversations!"}</Text>
-                {/*<FlatList style={styles.list}*/}
-                          {/*data={userConversations}*/}
-                          {/*keyExtractor={this.keyExtractor}*/}
-                          {/*renderItem={this.renderItem}/>*/}
+                <FlatList style={styles.list}
+                          data={conversations}
+                          keyExtractor={this.keyExtractor}
+                          renderItem={this.renderItem}/>
             </View>
         );
     }
 }
 
-// export default compose(
-//     GraphQL.operations.MyConversations
-// )(ConversationList);
+export default compose(
+    GraphQL.operations.Me
+)(ConversationList);
 
-export default ConversationList;
+// export default ConversationList;
 
 const styles = StyleSheet.create({
     container: {

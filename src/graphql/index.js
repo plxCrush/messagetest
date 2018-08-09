@@ -75,6 +75,22 @@ mutation CreateUserConversations ($conversationId: ID!, $userId: ID!) {
     }
 }`;
 
+export const me = gql`
+query Me {
+  me {
+    id
+    username
+    conversations {
+      userConversations {
+        conversation {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+`;
 
 // OPERATIONS
 export const operations = {
@@ -126,6 +142,17 @@ export const operations = {
             })
         }
     ),
+
+    Me: graphql(me, {
+        options: {
+            fetchPolicy: 'cache-and-network'
+        },
+        props: (props) => ({
+            conversations: props.data.me.conversations ? props.data.me.conversations.userConversations : [],
+            me: props.data.me,
+            loading: props.data.loading
+        }),
+    }),
 
     // CreateUser: graphql(createUser, {
     //         props: (props) => ({
