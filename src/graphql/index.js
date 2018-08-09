@@ -57,6 +57,24 @@ mutation CreateUser ($username: String!) {
     }
 }`;
 
+export const createConversation = gql`
+mutation CreateConversation ($id: ID!, $name: String!) {
+    createConversation(id: $id, name: $name) {
+        __typename
+        id
+        name
+    }
+}`;
+
+export const createUserConversations = gql`
+mutation CreateUserConversations ($conversationId: ID!, $userId: ID!) {
+    createUserConversations(conversationId: $conversationId, userId: $userId) {
+        __typename
+        conversationId
+        userId
+    }
+}`;
+
 
 // OPERATIONS
 export const operations = {
@@ -69,6 +87,38 @@ export const operations = {
                         optimisticResponse: () => {
                             return {
                                 createUser: {username, __typename: "User"}
+                            }
+                        },
+                    });
+                }
+            })
+        }
+    ),
+
+    CreateConversation: graphql(createConversation, {
+            props: (props) => ({
+                onCreateConversation: ({id, name}) => {
+                    return props.mutate({
+                        variables: {id, name},
+                        optimisticResponse: () => {
+                            return {
+                                createConversation: {id, name, __typename: "Conversation"}
+                            }
+                        },
+                    });
+                }
+            })
+        }
+    ),
+
+    CreateUserConversations: graphql(createUserConversations, {
+            props: (props) => ({
+                onCreateUserConversations: ({conversationId, userId}) => {
+                    return props.mutate({
+                        variables: {conversationId, userId},
+                        optimisticResponse: () => {
+                            return {
+                                createUserConversations: {conversationId, userId, __typename: "UserConversation"}
                             }
                         },
                     });
