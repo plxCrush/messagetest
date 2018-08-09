@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-class Chat extends React.Component {
+class Conversation extends React.Component {
 
     static navigationOptions = {
         title: 'Chat Screen'
@@ -9,20 +9,22 @@ class Chat extends React.Component {
 
     render() {
 
+        let {conversation} = this.props.navigation.state.params;
+
         return (
             <View style={styles.container}>
-                <Text style={styles.welcome}>{"I am Chat Screen!"}</Text>
+                <Text style={styles.welcome}>{conversation.name}</Text>
             </View>
         );
     }
 }
 
-export default Chat;
+export default Conversation;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        // justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },

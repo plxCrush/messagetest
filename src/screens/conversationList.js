@@ -14,9 +14,10 @@ class ConversationList extends React.Component {
     renderItem = (info) => {
 
         let conversation = info.item.conversation;
+        let {navigate} = this.props.navigation;
 
         return (
-            <TouchableOpacity onPress={() => alert(conversation.name)}>
+            <TouchableOpacity onPress={() => navigate('Conversation', {conversation})}>
                 <Text>{conversation.name}</Text>
             </TouchableOpacity>
         )
