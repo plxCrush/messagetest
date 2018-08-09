@@ -17,9 +17,11 @@ class ConversationList extends React.Component {
         let {navigate} = this.props.navigation;
 
         return (
-            <TouchableOpacity onPress={() => navigate('Conversation', {conversation})}>
-                <Text>{conversation.name}</Text>
-            </TouchableOpacity>
+            <View style={styles.row}>
+                <TouchableOpacity onPress={() => navigate('Conversation', {conversation})}>
+                    <Text style={styles.welcome}>{conversation.name}</Text>
+                </TouchableOpacity>
+            </View>
         )
     };
 
@@ -38,7 +40,7 @@ class ConversationList extends React.Component {
 
         return (
             <View style={styles.container}>
-                <Text style={styles.welcome}>{"Your Conversations!"}</Text>
+                <Text style={{...styles.welcome, color: 'red'}}>{"Your Conversations!"}</Text>
                 <FlatList style={styles.list}
                           data={conversations}
                           keyExtractor={this.keyExtractor}
@@ -65,5 +67,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         margin: 10,
+    },
+    row: {
+        margin: 10
     }
 });

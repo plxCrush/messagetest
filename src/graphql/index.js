@@ -4,6 +4,7 @@ import {graphql} from 'react-apollo'
 // QUERIES
 
 // -Commented below were used for MyChatApp api -
+
 // export const createUser = gql`
 // mutation CreateUser ($id: ID!, $username: String!) {
 //     createUser(input: {id: $id, username: $username}) {
@@ -132,6 +133,8 @@ mutation CreateMessage(
         createdAt
         conversationId
         id
+        sender
+             
     }
 }`;
 
@@ -142,7 +145,8 @@ query AllMessage($conversationId: ID!) {
         id
         content
         sender
-        isSent
+        createdAt
+        
     }
 }`;
 
@@ -150,9 +154,11 @@ export const subscribeToNewMessage = gql`
 subscription SubscribeToNewMessage($conversationId: ID!) {
     subscribeToNewMessage(conversationId: $conversationId) {
         __typename
+        id
         content
-        sender
-        isSent
+        sender    
+        createdAt
+          
     }
 }`;
 
@@ -223,7 +229,7 @@ export const operations = {
             fetchPolicy: 'cache-and-network'
         },
         props: (props) => ({
-            conversations: props.data.me.conversations ? props.data.me.conversations.userConversations : [],
+            conversations: props.data.me && props.data.me.conversations ? props.data.me.conversations.userConversations : [],
             loading: props.data.loading
         }),
     }),
@@ -243,7 +249,7 @@ export const operations = {
             fetchPolicy: 'cache-and-network',
             // update: (proxy, {data: {createMessage}}) => {
             //     const query = allMessage;
-            //     const variables = {conversationId: props.conversationId};
+            //     const variables = {conversationId: props.navigation.state.params.conversation.id};
             //     const data = proxy.readQuery({query, variables});
             //     data.allMessage = {
             //         ...data.allMessage.filter(c => {
@@ -256,12 +262,12 @@ export const operations = {
             // },
         }),
         props: (props) => ({
-            onCreateMessage: ({content, conversationId, createdAt, id}) => {
+            onCreateMessage: ({content, conversationId, createdAt, id, sender}) => {
                 return props.mutate({
-                    variables: {content, conversationId, createdAt, id},
+                    variables: {content, conversationId, createdAt, id, sender},
                     optimisticResponse: () => {
                         return {
-                            createMessage: {content, conversationId, createdAt, id, __typename: "Message"}
+                            createMessage: {content, conversationId, sender, createdAt, id, __typename: "Message"}
                         }
                     }
                 })
@@ -279,29 +285,21 @@ export const operations = {
         props: props => {
             return {
                 messages: props.data.allMessage,
-                // subscribeToNewMessage: (conversationId) => {
-                //     props.data.subscribeToMore({
-                //         document: subscribeToNewMessage,
-                //         variables: {
-                //             conversationId: conversationId,
-                //         },
-                //         updateQuery: (prev, { subscriptionData: { data: { subscribeToNewMessage } } }) => {
-                //             const res = {
-                //                 ...prev,
-                //                 allMessage: {
-                //                     ...prev.allMessage.filter(c => {
-                //                                 return (
-                //                                     c.content !== subscribeToNewMessage.content &&
-                //                                     c.createdAt !== subscribeToNewMessage.createdAt
-                //                                 )
-                //                             }),
-                //                             subscribeToNewMessage,
-                //                 },
-                //             };
-                //             return res;
-                //         }
-                //     })
-                // }
+                subscribeToNewMessage: ({conversationId}) => {
+                    props.data.subscribeToMore({
+                        document: subscribeToNewMessage,
+                        variables: {
+                            conversationId: conversationId ,
+                        },
+                        updateQuery: (prev, { subscriptionData: { data: { subscribeToNewMessage } } }) => {
+                            return {
+                                ...prev,
+                                allMessage: [...prev.allMessage.filter(message => message.id !== subscribeToNewMessage.id),
+                                    subscribeToNewMessage]
+                            }
+                        }
+                    })
+                }
             }
         }
     }),

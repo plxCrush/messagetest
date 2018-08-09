@@ -16,7 +16,8 @@ class Conversation extends React.Component {
 
     componentDidMount() {
 
-        // this.props.subscribeToNewMessage();
+        let {conversation} = this.props.navigation.state.params;
+        this.props.subscribeToNewMessage({conversationId: conversation.id});
     }
 
     send = () => {
@@ -25,8 +26,9 @@ class Conversation extends React.Component {
         let {newMessageText} = this.state;
         let createdAt = new Date().toISOString();
         let id = getUUID();
+        let sender = this.props.me.id;
 
-        this.props.onCreateMessage({content: newMessageText, conversationId: conversation.id, createdAt, id})
+        this.props.onCreateMessage({content: newMessageText, conversationId: conversation.id, createdAt, id, sender})
             .then(data => {
                     console.log('SUCCESS', data);
                     this.setState({newMessageText: ''})
@@ -43,19 +45,29 @@ class Conversation extends React.Component {
         let isMine = this.props.me.id === message.sender;
 
         let container = {
+            backgroundColor: 'white',
             flex: 1,
+            flexDirection: 'row',
             margin: 10,
-            justifyContent: isMine? 'flex-end' : 'flex-start'
+            padding: 8,
+            justifyContent: isMine ? 'flex-end' : 'flex-start'
         };
         let  sender = {
             fontSize: 12,
-            color: isMine ? 'green' : 'blue'
+            color: isMine ? 'blue' : 'red'
+        };
+        let content = {
+            fontSize: 16,
+            color: 'gray',
+            textAlign: isMine ? 'right' : 'left'
         };
 
         return (
             <View style={container}>
-                <Text style={sender}>{message.sender}</Text>
-                <Text style={styles.content}>{message.content}</Text>
+                <View>
+                    <Text style={sender}>{message.sender}</Text>
+                    <Text style={content}>{message.content}</Text>
+                </View>
             </View>
         )
     };
@@ -81,6 +93,7 @@ class Conversation extends React.Component {
 
                 <View style={styles.newMessageContainer}>
                     <TextInput placeholder='Enter message here...'
+                               style={{flex: 1, marginLeft: 16}}
                                value={newMessageText}
                                onChangeText={(newMessageText) => this.setState({newMessageText})}
                     />
@@ -104,9 +117,8 @@ export default compose(
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: '#CBE3EB',
         flex: 1,
-        // alignItems: 'center',
-        backgroundColor: '#F5FCFF',
     },
     welcome: {
         fontSize: 20,
@@ -123,16 +135,10 @@ const styles = StyleSheet.create({
         flex: 1
     },
     newMessageContainer: {
+        backgroundColor: '#0EADE2',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
-    },
-    messageContainer: {
-        flex: 1,
-        margin: 8
-    },
-    content: {
-        fontSize: 16,
-        color: 'gray'
+        justifyContent: 'center',
+        marginHorizontal: 10
     }
 });
