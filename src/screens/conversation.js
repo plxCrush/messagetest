@@ -76,7 +76,6 @@ class Conversation extends React.Component {
 
         let {conversation} = this.props.navigation.state.params;
         let {newMessageText} = this.state;
-        console.log('PROPS', this.props);
         let {messages} = this.props;
 
         return (

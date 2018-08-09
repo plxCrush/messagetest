@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {compose} from "react-apollo";
 import * as GraphQL from "../graphql";
 
