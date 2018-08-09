@@ -262,12 +262,12 @@ export const operations = {
             // },
         }),
         props: (props) => ({
-            onCreateMessage: ({content, conversationId, createdAt, id, sender}) => {
+            onCreateMessage: ({...message}) => {
                 return props.mutate({
-                    variables: {content, conversationId, createdAt, id, sender},
+                    variables: {...message},
                     optimisticResponse: () => {
                         return {
-                            createMessage: {content, conversationId, sender, createdAt, id, __typename: "Message"}
+                            createMessage: {...message, __typename: "Message"}
                         }
                     }
                 })
