@@ -67,6 +67,9 @@ class Conversation extends React.Component {
                 <View>
                     <Text style={sender}>{message.author && message.author.username}</Text>
                     <Text style={content}>{message.content}</Text>
+                    {isMine &&
+                    <Text style={{color: message.isSent ? 'green' : 'gray'}}>{message.isSent ? 'sent' : 'pending...'}</Text>
+                        }
                 </View>
             </View>
         )

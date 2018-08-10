@@ -86,6 +86,7 @@ mutation CreateMessage(
         conversationId
         id
         sender
+        isSent
         author {
             id
             username
@@ -102,6 +103,7 @@ query AllMessage($conversationId: ID!) {
         content
         sender
         createdAt
+        isSent
         author {
             __typename
             id
@@ -118,7 +120,7 @@ subscription SubscribeToNewMessage($conversationId: ID!) {
         content
         sender    
         createdAt
-          
+        isSent  
     }
 }`;
 
@@ -222,7 +224,7 @@ export const operations = {
                     optimisticResponse: () => {
                         return {
                             createMessage: {
-                                ...message,
+                                ...message, isSent: false,
                                 author: {...message.author, __typename: "User"},
                                 __typename: "Message"}
                         }
