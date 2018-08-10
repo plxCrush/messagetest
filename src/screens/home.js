@@ -24,7 +24,6 @@ class Home extends React.Component {
                 let username = payload.username;
                 this.props.onCreateUser({username})
                     .then(data => {
-                            console.log('SUCCESS', data);
                             this.setState({loading: false});
                             this.setState({username})
                         },

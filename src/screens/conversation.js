@@ -32,13 +32,9 @@ class Conversation extends React.Component {
             username: this.props.me.username
         };
 
-        this.props.onCreateMessage({content: newMessageText, conversationId: conversation.id, createdAt, id, sender, author})
-            .then(data => {
-                    console.log('SUCCESS', data);
-                    this.setState({newMessageText: ''})
-                },
-                error => console.log('ERROR', error))
-            .catch(err => console.log('ERR', err))
+        this.props.onCreateMessage({content: newMessageText, conversationId: conversation.id, createdAt, id, sender, author});
+        this.setState({newMessageText: ''});
+
     };
 
     keyExtractor = (item) => item.id;

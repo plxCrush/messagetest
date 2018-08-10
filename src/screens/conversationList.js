@@ -54,7 +54,6 @@ export default compose(
     GraphQL.operations.MyConversations
 )(ConversationList);
 
-// export default ConversationList;
 
 const styles = StyleSheet.create({
     container: {

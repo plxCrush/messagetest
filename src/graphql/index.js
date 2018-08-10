@@ -207,19 +207,13 @@ export const operations = {
     CreateMessage: graphql(createMessage, {
         options: props => ({
             fetchPolicy: 'cache-and-network',
-            // update: (proxy, {data: {createMessage}}) => {
-            //     const query = allMessage;
-            //     const variables = {conversationId: props.navigation.state.params.conversation.id};
-            //     const data = proxy.readQuery({query, variables});
-            //     data.allMessage = {
-            //         ...data.allMessage.filter(c => {
-            //             return c.content !== createMessage.content &&
-            //                 c.createdAt !== createMessage.createdAt
-            //         }),
-            //         createMessage,
-            //     };
-            //     proxy.writeQuery({query, data});
-            // },
+            update: (proxy, {data: {createMessage}}) => {
+                const query = allMessage;
+                const variables = {conversationId: props.navigation.state.params.conversation.id};
+                const data = proxy.readQuery({query, variables});
+                data.allMessage.push(createMessage);
+                proxy.writeQuery({query, variables, data});
+            },
         }),
         props: (props) => ({
             onCreateMessage: ({...message}) => {
