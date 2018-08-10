@@ -86,6 +86,10 @@ mutation CreateMessage(
         conversationId
         id
         sender
+        author {
+            id
+            username
+        }
              
     }
 }`;
@@ -98,7 +102,11 @@ query AllMessage($conversationId: ID!) {
         content
         sender
         createdAt
-        
+        author {
+            __typename
+            id
+            username
+        }
     }
 }`;
 
@@ -219,7 +227,10 @@ export const operations = {
                     variables: {...message},
                     optimisticResponse: () => {
                         return {
-                            createMessage: {...message, __typename: "Message"}
+                            createMessage: {
+                                ...message,
+                                author: {...message.author, __typename: "User"},
+                                __typename: "Message"}
                         }
                     }
                 })

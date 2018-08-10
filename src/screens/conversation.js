@@ -27,8 +27,12 @@ class Conversation extends React.Component {
         let createdAt = new Date().toISOString();
         let id = getUUID();
         let sender = this.props.me.id;
+        let author = {
+            id: sender,
+            username: this.props.me.username
+        };
 
-        this.props.onCreateMessage({content: newMessageText, conversationId: conversation.id, createdAt, id, sender})
+        this.props.onCreateMessage({content: newMessageText, conversationId: conversation.id, createdAt, id, sender, author})
             .then(data => {
                     console.log('SUCCESS', data);
                     this.setState({newMessageText: ''})
@@ -65,7 +69,7 @@ class Conversation extends React.Component {
         return (
             <View style={container}>
                 <View>
-                    <Text style={sender}>{message.sender}</Text>
+                    <Text style={sender}>{message.author && message.author.username}</Text>
                     <Text style={content}>{message.content}</Text>
                 </View>
             </View>
